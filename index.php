@@ -28,8 +28,8 @@
     </nav>
     <!--Header-->
     <div id="headerWrapper">
-      <div id="back-flower"></div>
       <div id="fore-flower"></div>
+      <div id="back-flower"></div>
       <div id="logotext"></div>
     </div>
     <p>¿Qué es Lorem Ipsum?
