@@ -32,30 +32,172 @@
       <div id="back-flower"></div>
       <div id="logotext"></div>
     </div>
-    <p>¿Qué es Lorem Ipsum?
-Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera que logró hacer un libro de textos especimen. No sólo sobrevivió 500 años, sino que tambien ingresó como texto de relleno en documentos electrónicos, quedando esencialmente igual al original. Fue popularizado en los 60s con la creación de las hojas "Letraset", las cuales contenian pasajes de Lorem Ipsum, y más recientemente con software de autoedición, como por ejemplo Aldus PageMaker, el cual incluye versiones de Lorem Ipsum.
+    <div class="container-fluid">
+      <!--left side bar-->
+      <div class="col-md-2">Left Side Bar</div>
+      <!--main content-->
+      <div class="col-md-8">
+        <div class="row">
+          <h2 class="text-center">Feature Products</h2>
 
-¿Por qué lo usamos?
-Es un hecho establecido hace demasiado tiempo que un lector se distraerá con el contenido del texto de un sitio mientras que mira su diseño. El punto de usar Lorem Ipsum es que tiene una distribución más o menos normal de las letras, al contrario de usar textos como por ejemplo "Contenido aquí, contenido aquí". Estos textos hacen parecerlo un español que se puede leer. Muchos paquetes de autoedición y editores de páginas web usan el Lorem Ipsum como su texto por defecto, y al hacer una búsqueda de "Lorem Ipsum" va a dar por resultado muchos sitios web que usan este texto si se encuentran en estado de desarrollo. Muchas versiones han evolucionado a través de los años, algunas veces por accidente, otras veces a propósito (por ejemplo insertándole humor y cosas por el estilo).
+          <div class="col-md-3">
+            <h4>Levis Jeans</h4>
+            <img src="images/products/men4.png" alt="Levis Jeans" class="img-thumb">
+            <p class="list-price text-danger">List Price <s>$54.99</s></p>
+            <p class="price">Our Price: $34.99</p>
+            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#details-1">
+              Details
+            </button>
+          </div>
 
+          <div class="col-md-3">
+            <h4>Woman's Shirt</h4>
+            <img src="images/products/women7.png" alt="Woman's Shirt" class="img-thumb">
+            <p class="list-price text-danger">List Price <s>$45.99</s></p>
+            <p class="price">Our Price: $29.99</p>
+            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#details-1">
+              Details
+            </button>
+          </div>
 
-¿De dónde viene?
-Al contrario del pensamiento popular, el texto de Lorem Ipsum no es simplemente texto aleatorio. Tiene sus raices en una pieza cl´sica de la literatura del Latin, que data del año 45 antes de Cristo, haciendo que este adquiera mas de 2000 años de antiguedad. Richard McClintock, un profesor de Latin de la Universidad de Hampden-Sydney en Virginia, encontró una de las palabras más oscuras de la lengua del latín, "consecteur", en un pasaje de Lorem Ipsum, y al seguir leyendo distintos textos del latín, descubrió la fuente indudable. Lorem Ipsum viene de las secciones 1.10.32 y 1.10.33 de "de Finnibus Bonorum et Malorum" (Los Extremos del Bien y El Mal) por Cicero, escrito en el año 45 antes de Cristo. Este libro es un tratado de teoría de éticas, muy popular durante el Renacimiento. La primera linea del Lorem Ipsum, "Lorem ipsum dolor sit amet..", viene de una linea</p>
-  <script type="text/javascript">
-  //Al realizar scroll en la pantalla, desplazamiento top pixeles.
-    jQuery(window).scroll(function() {
-      var vscroll=jQuery(this).scrollTop();
-      jQuery('#logotext').css({
-        "transform": "translate(0px, "+vscroll/2+"px)"
-      })
-      jQuery('#back-flower').css({
-        "transform": "translate("+vscroll/5+"px, -"+vscroll/12+"px)"
-      })
-      jQuery('#fore-flower').css({
-        "transform": "translate(0px, -"+vscroll/2+"px)"
-      })
-    });
-  </script>
+          <div class="col-md-3">
+            <h4>Hollister Shirt</h4>
+            <img src="images/products/men1.png" alt="Hollister Shirt" class="img-thumb">
+            <p class="list-price text-danger">List Price <s>$25.99</s></p>
+            <p class="price">Our Price: $19.99</p>
+            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#details-1">
+              Details
+            </button>
+          </div>
+
+          <div class="col-md-3">
+            <h4>Fancy Shoes</h4>
+            <img src="images/products/women6.png" alt="Fancy Shoes" class="img-thumb">
+            <p class="list-price text-danger">List Price <s>$69.99</s></p>
+            <p class="price">Our Price: $49.99</p>
+            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#details-1">
+              Details
+            </button>
+          </div>
+
+          <div class="col-md-3">
+            <h4>Boys Hoodie</h4>
+            <img src="images/products/boys1.png" alt="Boys Hoodie" class="img-thumb">
+            <p class="list-price text-danger">List Price <s>$24.99</s></p>
+            <p class="price">Our Price: $18.99</p>
+            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#details-1">
+              Details
+            </button>
+          </div>
+
+          <div class="col-md-3">
+            <h4>Girls Dress</h4>
+            <img src="images/products/girls3.png" alt="Girls Dress" class="img-thumb">
+            <p class="list-price text-danger">List Price <s>$34.99</s></p>
+            <p class="price">Our Price: $19.99</p>
+            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#details-1">
+              Details
+            </button>
+          </div>
+
+          <div class="col-md-3">
+            <h4>Women's Skirt</h4>
+            <img src="images/products/women3.png" alt="Women's Skirt" class="img-thumb">
+            <p class="list-price text-danger">List Price <s>$29.99</s></p>
+            <p class="price">Our Price: $19.99</p>
+            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#details-1">
+              Details
+            </button>
+          </div>
+
+          <div class="col-md-3">
+            <h4>Purse</h4>
+            <img src="images/products/women5.png" alt="Purse" class="img-thumb">
+            <p class="list-price text-danger">List Price <s>$49.99</s></p>
+            <p class="price">Our Price: $39.99</p>
+            <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#details-1">
+              Details
+            </button>
+          </div>
+        </div>
+      </div>
+      <!--right side bar-->
+      <div class="col-md-2">Right Side Bar</div>
+    </div>
+
+    <footer class="text-center" id="footer">&copy; Copyright 2017 Fernando Zuñe</footer>
+
+    <!--Details Modal-->
+    <div class="modal fade details-1" id="details-1" tabindex="-1" role="dialog" aria-labelledby="details-1" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title text-center">Levis Jeans</h4>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="center-block">
+                    <img src="images/products/men4.png" alt="Levis Jeans" class="details img-responsive">
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <h4>Details</h4>
+                  <p>These jeans amazing! They are straight leg, fit great and look sexy. Get a pair while they last.</p>
+                  <hr>
+                  <p>Price: $34.99</p>
+                  <p>Brand: Levis</p>
+                  <form action="add_cart.php" method="post">
+                    <div class="form-group">
+                      <div>
+                        <label for="quantity">Quantity:</label>
+                        <input type="text" class="form-control" id="quantity" name="quantity">
+                      </div>
+                      <div>
+                        <p>Available: 3</p>
+                      </div>
+
+                    </div>
+                    <div class="form-group">
+                      <label for="size">Size: </label>
+                      <select name="size" id="size" class="form-control">
+                        <option value=""></option>
+                        <option value="28">28</option>
+                        <option value="32">32</option>
+                        <option value="36">36</option>
+                      </select>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-default" data-dismiss="modal">Close</button>
+            <button class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-shopping-cart"></span>Add To Cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+    //Al realizar scroll en la pantalla, desplazamiento top pixeles.
+      jQuery(window).scroll(function() {
+        var vscroll=jQuery(this).scrollTop();
+        jQuery('#logotext').css({
+          "transform": "translate(0px, "+vscroll/2+"px)"
+        })
+        jQuery('#back-flower').css({
+          "transform": "translate("+vscroll/5+"px, -"+vscroll/12+"px)"
+        })
+        jQuery('#fore-flower').css({
+          "transform": "translate(0px, -"+vscroll/2+"px)"
+        })
+      });
+    </script>
 
   </body>
 </html>
