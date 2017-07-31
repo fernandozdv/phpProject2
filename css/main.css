@@ -1,20 +1,22 @@
 body{
   padding-top:50px;
 }
-
+/*Fondo*/
 #headerWrapper{
   position:relative;
   padding:0;
   margin:0;
+  /*Tamaño fijo y no scroll*/
   overflow:hidden;
   height:600px;
   background-image:url(../images/headerlogo/background.png);
   background-repeat: no-repeat;
   background-size: 100% 700px;
   background-position:top center;
+  /*Fija en la pantalla y cualquier div puede estar sobre ella*/
   background-attachment:fixed;
 }
-
+/*Logo*/
 #logotext{
   position:absolute;
   width:100%;
@@ -26,7 +28,7 @@ body{
   top:50%;
   margin-top:-90px;
 }
-
+/*Flor rosada*/
 #fore-flower{
   position:absolute;
   width:100%;
@@ -39,6 +41,7 @@ body{
   right:-50px;
 }
 
+/*Flor morada*/
 #back-flower{
   position: absolute;
   width: 100%;
@@ -59,12 +62,12 @@ body{
 #footer{
   margin-top:25px;
 }
-
+/*Imagenes en modal*/
 img.details{
   width: 33%;
   margin:15px auto;
 }
-
+/*Centrar la tabla*/
 .table-auto{
   width:auto;
   margin:0 auto;

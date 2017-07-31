@@ -1,10 +1,11 @@
 <?php
+//Principal
   require_once 'core/init.php';
   include 'includes/head.php';
   include 'includes/navigation.php';
   include 'includes/headerfull.php';
   include 'includes/leftbar.php';
-
+//Mostrar productos destacados
   $sql="SELECT * FROM products WHERE featured=1";
   $featured=$db->query($sql);
   ?>
@@ -17,9 +18,11 @@
             ?>
           <div class="col-md-3">
             <h4><?= $product['title']; ?></h4>
+            <!--Imagen del producto, alt título-->
             <img src="<?= $product['image']; ?>" alt="<?= $product['title']; ?>" class="img-thumb">
             <p class="list-price text-danger">List Price <s>$<?= $product['list_price']; ?></s></p>
             <p class="price">Our Price: $<?= $product['price']; ?></p>
+            <!--Al presionar el botón de detalles, llamará a la función JS detailsmodal pasando el id del producto-->
             <button type="button" class="btn btn-sm btn-success" onclick="detailsmodal(<?= $product['id']; ?>)">Details</button>
           </div>
           <?php  } ?>

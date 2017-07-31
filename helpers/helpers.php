@@ -1,4 +1,5 @@
 <?php
+//Alertas de error en formularios
   function display_errors($errors)
   {
     $display='<ul class="bg-danger">';
@@ -9,7 +10,7 @@
     $display.='</ul>';
     return $display;
   }
-
+//Eliminación de ciertas entidades o caracteres en formularios < > / ' '
   function sanitize($dirty)
   {
     return htmlentities($dirty,ENT_QUOTES,"UTF-8");

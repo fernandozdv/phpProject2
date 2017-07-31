@@ -7,6 +7,7 @@ $sql="SELECT * FROM brand ORDER BY brand";
 $results=$db->query($sql);
 $errors=array();
 //editar marcas
+//Si existe y no es null, AND, no es vacio
 if(isset($_GET['edit'])&&!empty($_GET['edit']))
 {
   $edit_id=(int)$_GET['edit'];
@@ -16,6 +17,7 @@ if(isset($_GET['edit'])&&!empty($_GET['edit']))
   $eBrand=mysqli_fetch_assoc($edi_result);
 }
 //eliminar marcas
+//Si existe y no es null, AND, no es vacio
 if(isset($_GET['delete'])&&!empty($_GET['delete']))
 {
   $delete_id=(int) $_GET['delete'];
@@ -25,6 +27,7 @@ if(isset($_GET['delete'])&&!empty($_GET['delete']))
   header('Location: brands.php');
 }
 //agregar marcas de form
+//Si existe y no es null
 if(isset($_POST['add_submit']))
 {
   //verificar si está en blanco
@@ -70,6 +73,7 @@ if(isset($_POST['add_submit']))
 <h2 class="text-center">Brands</h2><hr>
 <!--Brand Form-->
 <div class="text-center">
+  <!-- Utiliza un botón solamente y crea un operador ternario para ajustar dependiendo si es para editar o agregar -->
   <form class="form-inline" action="brands.php<?=((isset($_GET['edit']))?'?edit='.$edit_id:'');?>" method="post">
     <div class="form-group">
       <?php
