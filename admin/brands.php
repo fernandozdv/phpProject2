@@ -6,7 +6,24 @@ include 'includes/navigation.php';
 $sql="SELECT * FROM brand ORDER BY brand";
 $results=$db->query($sql);
 $errors=array();
-
+//editar marcas
+if(isset($_GET['edit'])&&!empty($_GET['edit']))
+{
+  $edit_id=(int)$_GET['edit'];
+  $edit_id=sanitize($edit_id);
+  $sql2="SELECT * FROM brand WHERE id='$edit_id'";
+  $edi_result=$db->query($sql2);
+  $eBrand=mysqli_fetch_assoc($edi_result);
+}
+//eliminar marcas
+if(isset($_GET['delete'])&&!empty($_GET['delete']))
+{
+  $delete_id=(int) $_GET['delete'];
+  $delete_id=sanitize($delete_id);
+  $sql="DELETE FROM brand WHERE id='$delete_id'";
+  $db->query($sql);
+  header('Location: brands.php');
+}
 //agregar marcas de form
 if(isset($_POST['add_submit']))
 {
@@ -19,9 +36,13 @@ if(isset($_POST['add_submit']))
     //verificar si ya existe
     $brand=sanitize($_POST['brand']);
     $sql="SELECT * FROM brand WHERE brand='$brand'";
+    if(isset($_GET['edit']))
+    {
+        $sql="SELECT * FROM brand WHERE brand='$brand' AND id!='$edit_id'";
+    }
     $result=$db->query($sql);
     $count=mysqli_num_rows($result);
-    if($count==1)
+    if($count>0)
     {
       $errors[].='La marca '.$brand.' ya existe. Pruebe ingresando otra!.';
     }
@@ -35,6 +56,10 @@ if(isset($_POST['add_submit']))
   {
     //Agregar la marca a la base de datos
     $sql="INSERT INTO brand(brand) VALUES ('$brand')";
+    if(isset($_GET['edit']))
+    {
+      $sql="UPDATE brand SET brand='$brand' WHERE id='$edit_id'";
+    }
     $db->query($sql);
     $bnd=1;
     header('Location: brands.php');
@@ -45,11 +70,21 @@ if(isset($_POST['add_submit']))
 <h2 class="text-center">Brands</h2><hr>
 <!--Brand Form-->
 <div class="text-center">
-  <form class="form-inline" action="brands.php" method="post">
+  <form class="form-inline" action="brands.php<?=((isset($_GET['edit']))?'?edit='.$edit_id:'');?>" method="post">
     <div class="form-group">
-      <label for="brand">Add brand:</label>
-      <input type="text" name="brand" id="brand" class="form-control" value="<?=((isset($_POST['brand']))?$_POST['brand']:'');?>">
-      <input type="submit" name="add_submit" value="Add Brand" class="btn btn-success">
+      <?php
+      $brand_value='';
+      if(isset($_GET['edit'])){
+        $brand_value=$eBrand['brand'];
+      }elseif (isset($_POST['brand'])) {
+        $brand_value=sanitize($_POST['brand']);
+      }?>
+      <label for="brand"><?=((isset($_GET['edit']))?'Editar: ':'Agregar: ');?></label>
+      <input type="text" name="brand" id="brand" class="form-control" value="<?=$brand_value;?>">
+      <input type="submit" name="add_submit" value="<?=((isset($_GET['edit']))?'Editar':'Agregar');?>" class="btn btn-success">
+      <?php if(isset($_GET['edit'])){ ?>
+        <a href="brands.php" class="btn btn-default">Cancel</a>
+      <?php } ?>
     </div>
   </form>
 </div><hr>
