@@ -23,7 +23,6 @@
           <span aria-hidden="true" onclick="closeModal()">&times;</span>
         </button>
         <h4 class="modal-title text-center"><?=$product['title']?></h4>
-        <?php var_dump($sizestring)?>
       </div>
       <div class="modal-body">
         <div class="container-fluid">
