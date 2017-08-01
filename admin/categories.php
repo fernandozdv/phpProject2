@@ -48,7 +48,7 @@
     if(isset($_GET['edit']))
     {
       $id=$edit_category['id'];
-      $sql="SELECT * FROM categories WHERE category='$category' AND parent='$post_parent' AND id!='$id'";
+      $sqlform="SELECT * FROM categories WHERE category='$category' AND parent='$post_parent' AND id!='$id'";
     }
     $fresult=$db->query($sqlform);
     $count=mysqli_num_rows($fresult);
@@ -109,12 +109,23 @@
          <label for="parent">Parent</label>
          <select class="form-control" name="parent" id="parent">
            <!-- seleccionar el campo PADRE 0 en caso de error o edición -->
+           <?php if(!isset($_GET['edit'])){ ?>
            <option value="0" <?=(($parent_value==0)?'selected':'');?>>Parent</option>
            <!-- Categorias en select -->
            <?php while ($parent=mysqli_fetch_assoc($result)) {?>
              <!-- seleccionar el campo en caso de error o edición -->
              <option value="<?=$parent['id'];?>" <?=(($parent_value==$parent['id'])?'selected':'');?>><?=$parent['category'];?></option>
-           <?php } ?>
+           <?php } }else{
+              $parent_name='Parent';
+              while($parent=mysqli_fetch_assoc($result)){
+                if($parent['id']==$parent_value)
+                {
+                  $parent_name=$parent['category'];
+                }
+              };
+             ?>
+             <option value="<?=$parent_value?>"><?=$parent_name;?></option>
+          <?php  }?>
          </select>
        </div>
        <div class="form-group">
