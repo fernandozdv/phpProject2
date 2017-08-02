@@ -1,16 +1,36 @@
 <?php
   require_once $_SERVER['DOCUMENT_ROOT'].'/tutorial/phpProject2/core/init.php';
-
   include 'includes/head.php';
   include 'includes/navigation.php';
-  if(isset($_GET['add']))
+  if(isset($_GET['add'])||isset($_GET['edit']))
   {
     $brandQuery=$db->query("SELECT * FROM brand");
     $parentQuery=$db->query("SELECT * FROM categories WHERE parent=0 ORDER BY category");
+    //Editar o agregar
+    $title=((isset($_POST['title'])&&$_POST['title']!='')?sanitize($_POST['title']):'');
+    $brand=((isset($_POST['brand'])&&!empty($_POST['brand']))?sanitize($_POST['brand']):'');
+    $parent=((isset($_POST['parent'])&&!empty($_POST['parent']))?sanitize($_POST['parent']):'');
+    $category=((isset($_POST['child'])&&!empty($_POST['child']))?sanitize($_POST['child']):'');
+    if(isset($_GET['edit']))
+    {
+      $edit_id=(int)$_GET['edit'];
+      $productresults=$db->query("SELECT * FROM products WHERE id='$edit_id'");
+      $product=mysqli_fetch_assoc($productresults);
+      $category=((isset($_POST['child'])&&$_POST['child']!='')?sanitize($_POST['child']):$product['categories']);
+      //Establece el valor a ser editado cuando el campo ha sido borrado y ocurre un error
+      //Nemo click editado, borra el campo en edición, ocurre error y escribe de nuevo Nemo
+      //Cuando está vacio, obtiene de la BD
+      //Cuando está sobreescrito, obtiene lo mismo luego de dar a Editar
+      //Cuando le dio click en editar, obtiene de la BD por primera vez
+      $title=((isset($_POST['title'])&&!empty($_POST['title']))?sanitize($_POST['title']):$product['title']);
+      $brand=((isset($_POST['brand'])&&!empty($_POST['brand']))?sanitize($_POST['brand']):$product['brand']);
+      $parentQ=$db->query("SELECT * FROM categories WHERE id='$category'");
+      $parentResult=mysqli_fetch_assoc($parentQ);
+      $parent=((isset($_POST['parent'])&&!empty($_POST['parent']))?sanitize($_POST['parent']):$parentResult['parent']);
+      echo "papa".$parent;
+    }
     if($_POST)
     {
-      $title=sanitize($_POST['title']);
-      $brand=sanitize($_POST['brand']);
       $categories=sanitize($_POST['child']);
       $price=sanitize($_POST['price']);
       $list_price=sanitize($_POST['list_price']);
@@ -47,7 +67,7 @@
           break;
         }
       }
-      if(!empty($_FILES))
+      if(!empty($_FILES['photo']['name']))
       {
         //Array del archivo, información
         $photo=$_FILES['photo'];
@@ -79,7 +99,7 @@
         $dbpath='/tutorial/phpProject2/images/products/'.$uploadName;
         if($mimeType!='image')
         {
-          $errors[]='Se necesita una imagen.';
+          $errors[]='El archivo debe ser una imagen.';
         }
         //Busca la variable $fileExt en el array $allowed que contiene los tipos de extensión
         elseif(!in_array($fileExt,$allowed))
@@ -95,6 +115,9 @@
           $error[]='La extensión no coincide con el archivo ingresado';
         }*/
       }
+      else{
+        $errors[]="Debe ingresar una imagen del producto.";
+      }
       if(!empty($errors))
       {
         echo display_errors($errors);
@@ -108,28 +131,28 @@
       }
     }
     ?>
-    <h2 class="text-center">Agregar un nuevo producto</h2>
-    <form class="" action="products.php?add=1" method="post" enctype="multipart/form-data">
+    <h2 class="text-center"><?=((isset($_GET['edit']))?'Editar un ':'Agregar un nuevo ');?>producto</h2>
+    <form class="" action="products.php?<?=((isset($_GET['edit']))?'edit='.$edit_id:'add=1');?>" method="post" enctype="multipart/form-data">
     <div class="row">
       <div class="form-group col-md-3">
         <label for="title">Título*:</label>
-        <input type="text" name="title" class="form-control" id="title" value="<?=((isset($_POST['title']))?sanitize($_POST['title']):'');?>">
+        <input type="text" name="title" class="form-control" id="title" value="<?=$title;?>">
       </div>
       <div class="form-group col-md-3">
         <label for="brand">Marca*:</label>
         <select class="form-control" id="brand" name="brand">
-          <option value="" <?=((isset($_POST['brand'])&&$_POST['brand']=='')?' selected':'')?>></option>
-          <?php while($brand=mysqli_fetch_assoc($brandQuery)): ?>
-            <option value="<?=$brand['id'];?>" <?=((isset($_POST['brand'])&&$_POST['brand']==$brand['id'])?' selected':'')?>><?=$brand['brand'];?></option>
+          <option value="" <?=(($brand=='')?' selected':'')?>></option>
+          <?php while($b=mysqli_fetch_assoc($brandQuery)): ?>
+            <option value="<?=$b['id'];?>" <?=(($brand==$b['id'])?' selected':'')?>><?=$b['brand'];?></option>
           <?php endwhile; ?>
         </select>
       </div>
       <div class="form-group col-md-3">
         <label for="parent">Categoría padre</label>
         <select class="form-control" name="parent" id="parent">
-          <option value=""<?=((isset($_POST['parent'])&&$_POST['parent']=='')?' selected':'')?>></option>
-          <?php while ($parent=mysqli_fetch_assoc($parentQuery)):?>
-            <option value="<?=$parent['id'];?>" <?=((isset($_POST['parent'])&&$_POST['parent']==$parent['id'])?' selected':'');?>><?=$parent['category'];?></option>
+          <option value=""<?=(($parent=='')?' selected':'')?>></option>
+          <?php while ($p=mysqli_fetch_assoc($parentQuery)):?>
+            <option value="<?=$p['id'];?>" <?=(($parent==$p['id'])?' selected':'');?>><?=$p['category'];?></option>
           <?php endwhile; ?>
         </select>
       </div>
@@ -168,7 +191,9 @@
       </div>
     </div>
     <div class="form-group pull-right">
-      <input type="submit" class="form-control btn btn-success pull-right" value="Agregar un producto">
+      <input type="submit" class="form-control btn btn-success pull-right" value="<?=((isset($_GET['edit']))?'Editar ':'Agregar ');?>producto">
+      <hr>
+      <a href="products.php" class="form-control btn btn-default">Cancelar</a>
     </div><div class="clearfix"></div>
     </form>
 
