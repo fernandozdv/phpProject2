@@ -15,6 +15,7 @@
   {
     return htmlentities($dirty,ENT_QUOTES,"UTF-8");
   }
+//Formato de precio, 2 decimales
   function money($number)
   {
     return '$'.number_format($number,2);
