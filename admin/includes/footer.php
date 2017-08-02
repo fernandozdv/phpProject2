@@ -2,6 +2,18 @@
 <footer class="col-md-12 text-center" id="footer">&copy; Copyright 2017 Fernando Zuñe</footer>
 
 <script type="text/javascript">
+  function updateSizes()
+  {
+    var sizeString='';
+    for(var i=1;i<=12;i++)
+    {
+      if(jQuery('#size'+i).val()!='')
+      {
+        sizeString+=jQuery('#size'+i).val()+':'+jQuery('#qty'+i).val()+',';
+      }
+    }
+    jQuery('#sizes').val(sizeString);
+  }
   function get_child_options()
   {
     var parentID=jQuery("#parent").val();
@@ -19,6 +31,10 @@
   //Seleccionar select de nombre parent para obtener hijos
   //Change-> Cuando se seleccione una opción en el select saltará esta función
   jQuery('select[name="parent"]').change(get_child_options);
+  jQuery('document').ready(function(){
+    get_child_options();
+  });
+
 </script>
 </body>
 </html>
