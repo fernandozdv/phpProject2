@@ -9,6 +9,15 @@
     $parentQuery=$db->query("SELECT * FROM categories WHERE parent=0 ORDER BY category");
     if($_POST)
     {
+      $title=sanitize($_POST['title']);
+      $brand=sanitize($_POST['brand']);
+      $categories=sanitize($_POST['child']);
+      $price=sanitize($_POST['price']);
+      $list_price=sanitize($_POST['list_price']);
+      $sizes=rtrim(sanitize($_POST['sizes']),',');
+      $description=sanitize($_POST['description']);
+      $dbpath='';
+      $errors=array();
       if(!empty($_POST['sizes']))
       {
         $sizeString=sanitize($_POST['sizes']);
@@ -29,6 +38,73 @@
         }
       }else{
         $sizesArray=array();
+      }
+      $required=array('title','brand','price','parent','child','sizes');
+      foreach ($required as $field) {
+        if($_POST[$field]=='')
+        {
+          $errors[]='Rellenar todos los campos con asterisco.';
+          break;
+        }
+      }
+      if(!empty($_FILES))
+      {
+        //Array del archivo, información
+        $photo=$_FILES['photo'];
+        //Campo nombre del archivo
+        $name=$photo['name'];
+        //Divide el nombre de la extensión
+        $nameArray=explode('.',$name);
+        //Nombre
+        $fileName=$nameArray[0];
+        //Extensión : jpg,png,etc.
+        $fileExt=$nameArray[1];
+        //Campo tipo de archivo
+        $mime=explode('/',$photo['type']);
+        //Tipo de archivo
+        $mimeType=$mime[0];
+        //Extensión del tipo de archivo
+        $mimeExt=$mime[1];
+        //Ubicación temporal
+        $tmpLoc=$photo['tmp_name'];
+        //Tamaño en bytes
+        $fileSize=$photo['size'];
+        //Si no subió una imagen.
+        $allowed=array('png','jpg','jpeg','gif');
+        //Encriptar el nombre de la imagen
+        $uploadName=md5(microtime()).'.'.$fileExt;
+        //Ruta para guardar la imagen
+        $uploadPath=BASEURL.'/images/products/'.$uploadName;
+        //Ruta para la base de datos y que será obtenida por la página principal
+        $dbpath='/tutorial/phpProject2/images/products/'.$uploadName;
+        if($mimeType!='image')
+        {
+          $errors[]='Se necesita una imagen.';
+        }
+        //Busca la variable $fileExt en el array $allowed que contiene los tipos de extensión
+        elseif(!in_array($fileExt,$allowed))
+        {
+          $errors[]='La imagen no coincide con el formato requerido. JPG,JPEG,PNG o GIF';
+        }
+        elseif($fileSize>15000000)
+        {
+          $errors[]='Archivo muy pesado, no supere los 15mb.';
+        }/*
+        elseif($fileExt!=$mimeExt&&$mimeExt=='jpeg'&&$fileExt!='jpg')
+        {
+          $error[]='La extensión no coincide con el archivo ingresado';
+        }*/
+      }
+      if(!empty($errors))
+      {
+        echo display_errors($errors);
+      }else{
+        //agregar todo a la BD
+        //Agregar imagen a la carpeta de la ruta especificada
+        move_uploaded_file($tmpLoc,$uploadPath);
+        $insertSql="INSERT INTO products(title,price,list_price,brand,categories,sizes,image,description) VALUES('$title','$price','$list_price','$brand','$categories','$sizes','$dbpath','$description')";
+        $db->query($insertSql);
+        header('Location: products.php');
       }
     }
     ?>
@@ -69,7 +145,7 @@
         <input type="text" name="price" id="price" class="form-control" value="<?=((isset($_POST['price']))?sanitize($_POST['price']):'');?>">
       </div>
       <div class="form-group col-md-3">
-        <label for="list_price">Price de lista*:</label>
+        <label for="list_price">Price de lista:</label>
         <input type="text" name="list_price" id="list_price" class="form-control" value="<?=((isset($_POST['list_price']))?sanitize($_POST['list_price']):'');?>">
       </div>
       <div class="form-group col-md-3">
