@@ -76,3 +76,8 @@ img.details{
 #add-product-btn{
   margin-top: -35px;
 }
+/*Imagen en edición*/
+.saved-image img{
+  width:200px;
+  height:auto;
+}

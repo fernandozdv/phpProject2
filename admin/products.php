@@ -2,6 +2,7 @@
   require_once $_SERVER['DOCUMENT_ROOT'].'/tutorial/phpProject2/core/init.php';
   include 'includes/head.php';
   include 'includes/navigation.php';
+  $dbpath='';
   if(isset($_GET['add'])||isset($_GET['edit']))
   {
     $brandQuery=$db->query("SELECT * FROM brand");
@@ -11,11 +12,26 @@
     $brand=((isset($_POST['brand'])&&!empty($_POST['brand']))?sanitize($_POST['brand']):'');
     $parent=((isset($_POST['parent'])&&!empty($_POST['parent']))?sanitize($_POST['parent']):'');
     $category=((isset($_POST['child'])&&!empty($_POST['child']))?sanitize($_POST['child']):'');
+    $price=((isset($_POST['price'])&&$_POST['price']!='')?sanitize($_POST['price']):'');
+    $list_price=((isset($_POST['list_price'])&&$_POST['list_price']!='')?sanitize($_POST['list_price']):'');
+    $description=((isset($_POST['description'])&&$_POST['description']!='')?sanitize($_POST['description']):'');
+    $sizes=((isset($_POST['sizes'])&&$_POST['sizes']!='')?sanitize($_POST['sizes']):'');
+    $saved_image='';
     if(isset($_GET['edit']))
     {
       $edit_id=(int)$_GET['edit'];
       $productresults=$db->query("SELECT * FROM products WHERE id='$edit_id'");
       $product=mysqli_fetch_assoc($productresults);
+      //Variable de petición ficticia para saber que se elimina la imagen
+      if(isset($_GET['delete_image']))
+      {
+        //Obtiene la ruta y la concatena para obtener la ruta absoluta
+        $image_url=$_SERVER['DOCUMENT_ROOT'].$product['image'];
+        //Elimina la imagen a la carpeta en la ruta especificada
+        unlink($image_url);
+        $db->query("UPDATE products SET image='' WHERE id='$edit_id'");
+        header('Location: products.php?edit='.$edit_id);
+      }
       $category=((isset($_POST['child'])&&$_POST['child']!='')?sanitize($_POST['child']):$product['categories']);
       //Establece el valor a ser editado cuando el campo ha sido borrado y ocurre un error
       //Nemo click editado, borra el campo en edición, ocurre error y escribe de nuevo Nemo
@@ -27,38 +43,44 @@
       $parentQ=$db->query("SELECT * FROM categories WHERE id='$category'");
       $parentResult=mysqli_fetch_assoc($parentQ);
       $parent=((isset($_POST['parent'])&&!empty($_POST['parent']))?sanitize($_POST['parent']):$parentResult['parent']);
-      echo "papa".$parent;
+      $price=((isset($_POST['price'])&&!empty($_POST['price']))?sanitize($_POST['price']):$product['price']);
+      $list_price=((isset($_POST['list_price'])&&!empty($_POST['list_price']))?sanitize($_POST['list_price']):$product['list_price']);
+      $description=((isset($_POST['description'])&&!empty($_POST['description']))?sanitize($_POST['description']):$product['description']);
+      $sizes=((isset($_POST['sizes'])&&!empty($_POST['sizes']))?sanitize($_POST['sizes']):$product['sizes']);
+      $saved_image=(($product['image']!='')?$product['image']:'');
+      $dbpath=$saved_image;
+    }
+    //Cuando la variable de tamaños y cantidades obtenga valor o sea modificada
+    //Entrará a esta condicional y realizará la división de la cadena para ser mostrada por el modal
+    //Esto se realiza siempre que sizes no esté vacía
+    //En primer lugar obtendrá al click en edición, los tamaños y cantidades correspondientes en la caja de texto, luego esto en el modal
+    //Si eliminamos el texto, obtendrá de la BD
+    //Si modificamos se guardará por realizar petición POST
+    //Si deseamos agregar, inicialmente estará vacía, luego al rellenar se dará la petición y el campo obtendrá el texto de ello.
+    if(!empty($sizes))
+    {
+      $sizeString=sanitize($sizes);
+      $sizeString=rtrim($sizeString,',');
+      //Divide los diferentes tamaños y cantidades con otras.
+      $sizesArray=explode(',',$sizeString);
+      $sArray=array();
+      $qArray=array();
+      foreach ($sizesArray as $ss)
+      {
+        //Divide los tamaños y sus cantidades
+        $s=explode(':',$ss);
+        //Almacena los tamaños, itera
+        $sArray[]=$s[0];
+        //Almacena la cantidad de los tamaños, itera
+        $qArray[]=$s[1];
+      }
+    }else{
+      $sizesArray=array();
     }
     if($_POST)
     {
-      $categories=sanitize($_POST['child']);
-      $price=sanitize($_POST['price']);
-      $list_price=sanitize($_POST['list_price']);
-      $sizes=rtrim(sanitize($_POST['sizes']),',');
-      $description=sanitize($_POST['description']);
       $dbpath='';
       $errors=array();
-      if(!empty($_POST['sizes']))
-      {
-        $sizeString=sanitize($_POST['sizes']);
-        //Elimina la coma final
-        $sizeString=rtrim($sizeString,',');
-        //Divide los diferentes tamaños y cantidades con otras.
-        $sizesArray=explode(',',$sizeString);
-        $sArray=array();
-        $qArray=array();
-        foreach ($sizesArray as $ss)
-        {
-          //Divide los tamaños y sus cantidades
-          $s=explode(':',$ss);
-          //Almacena los tamaños, itera
-          $sArray[]=$s[0];
-          //Almacena la cantidad de los tamaños, itera
-          $qArray[]=$s[1];
-        }
-      }else{
-        $sizesArray=array();
-      }
       $required=array('title','brand','price','parent','child','sizes');
       foreach ($required as $field) {
         if($_POST[$field]=='')
@@ -125,7 +147,11 @@
         //agregar todo a la BD
         //Agregar imagen a la carpeta de la ruta especificada
         move_uploaded_file($tmpLoc,$uploadPath);
-        $insertSql="INSERT INTO products(title,price,list_price,brand,categories,sizes,image,description) VALUES('$title','$price','$list_price','$brand','$categories','$sizes','$dbpath','$description')";
+        $insertSql="INSERT INTO products(title,price,list_price,brand,categories,sizes,image,description) VALUES('$title','$price','$list_price','$brand','$category','$sizes','$dbpath','$description')";
+        if(isset($_GET['edit']))
+        {
+          $insertSql="UPDATE products SET title='$title',price='$price',list_price='$list_price',brand='$brand',categories='$category',sizes='$sizes',image='$dbpath',description='$description' WHERE id='$edit_id'";
+        }
         $db->query($insertSql);
         header('Location: products.php');
       }
@@ -165,11 +191,11 @@
     <div class="row">
       <div class="form-group col-md-3">
         <label for="price">Precio*:</label>
-        <input type="text" name="price" id="price" class="form-control" value="<?=((isset($_POST['price']))?sanitize($_POST['price']):'');?>">
+        <input type="text" name="price" id="price" class="form-control" value="<?=$price;?>">
       </div>
       <div class="form-group col-md-3">
         <label for="list_price">Price de lista:</label>
-        <input type="text" name="list_price" id="list_price" class="form-control" value="<?=((isset($_POST['list_price']))?sanitize($_POST['list_price']):'');?>">
+        <input type="text" name="list_price" id="list_price" class="form-control" value="<?=$list_price;?>">
       </div>
       <div class="form-group col-md-3">
         <label>Cantidad y tamaños*:</label>
@@ -177,17 +203,24 @@
       </div>
       <div class="form-group col-md-3">
         <label for="sizes">Vista previa: Cantidad y tamaños</label>
-        <input class="form-control" type="text" name="sizes" id="sizes" value="<?=((isset($_POST['sizes']))?$_POST['sizes']:'');?>" readonly>
+        <input class="form-control" type="text" name="sizes" id="sizes" value="<?=$sizes;?>" readonly>
       </div>
     </div>
     <div class="row">
       <div class="form-group col-md-6">
-        <label for="photo">Imagen del producto:</label>
-        <input type="file" name="photo" class="form-control" id="photo">
+        <?php if($saved_image!=''): ?>
+          <div class="saved-image">
+            <img src="<?=$saved_image;?>" alt="<?=$saved_image;?>"><br>
+            <a href="products.php?delete_image=1&edit=<?=$edit_id;?>" class="text-danger">Eliminar imagen</a>
+          </div>
+          <?php else: ?>
+            <label for="photo">Imagen del producto:</label>
+            <input type="file" name="photo" class="form-control" id="photo">
+        <?php endif; ?>
       </div>
       <div class="form-group col-md-6">
         <label for="description">Descripción:</label>
-        <textarea name="description" id="description" class="form-control" rows="6"><?=((isset($_POST['description']))?sanitize($_POST['description']):'');?></textarea>
+        <textarea name="description" id="description" class="form-control" rows="6"><?=$description;?></textarea>
       </div>
     </div>
     <div class="form-group pull-right">
@@ -295,10 +328,17 @@
   </tbody>
 </table>
 
-
-
 <?php
   }
-  include 'includes/footer.php';
+  include 'includes/footer.php';?>
 
-?>
+<script type="text/javascript">
+//Cuando se cargue la página se muestra la lista de categorías hijas
+//Se mandará por ajax a child_categories, la categoría que debería estar seleccionada
+//En caso esté vacía buscará en la BD y mandará el ID
+//En caso se seleccione algo, mandará esa selección
+//Si ocurre error $category almacena el valor
+    jQuery('document').ready(function(){
+      get_child_options('<?=$category;?>');
+    });
+</script>
