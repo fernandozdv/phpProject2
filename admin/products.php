@@ -3,6 +3,7 @@
   include 'includes/head.php';
   include 'includes/navigation.php';
   $dbpath='';
+
   if(isset($_GET['add'])||isset($_GET['edit']))
   {
     $brandQuery=$db->query("SELECT * FROM brand");
@@ -79,6 +80,7 @@
     }
     if($_POST)
     {
+      $temp_image=$dbpath;
       $dbpath='';
       $errors=array();
       $required=array('title','brand','price','parent','child','sizes');
@@ -138,7 +140,13 @@
         }*/
       }
       else{
-        $errors[]="Debe ingresar una imagen del producto.";
+        if(empty($temp_image))
+        {
+          $errors[]="Debe ingresar una imagen del producto.";
+        }
+        else{
+          $dbpath=$temp_image;
+        }
       }
       if(!empty($errors))
       {
@@ -194,7 +202,7 @@
         <input type="text" name="price" id="price" class="form-control" value="<?=$price;?>">
       </div>
       <div class="form-group col-md-3">
-        <label for="list_price">Price de lista:</label>
+        <label for="list_price">Precio de lista:</label>
         <input type="text" name="list_price" id="list_price" class="form-control" value="<?=$list_price;?>">
       </div>
       <div class="form-group col-md-3">
@@ -255,8 +263,8 @@
           </div>
         </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" onclick="updateSizes();jQuery('#sizesModal').modal('toggle');return false;">Save changes</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-primary" onclick="updateSizes();jQuery('#sizesModal').modal('toggle');return false;">Guardar cambios</button>
           </div>
         </div>
       </div>
@@ -276,19 +284,25 @@
     $db->query($featuredSql);
     header('Location: products.php');
   }
+  if(isset($_GET['delete']))
+  {
+    $did=(int)$_GET['delete'];
+    $db->query("UPDATE products SET deleted='1' WHERE id='$did'");
+    header('Location: products.php');
+  }
  ?>
 
-<h2 class="text-center">Products</h2>
-<a href="products.php?add=1" class="btn btn-success pull-right" id="add-product-btn">Add Product</a>
+<h2 class="text-center">Productos</h2>
+<a href="products.php?add=1" class="btn btn-success pull-right" id="add-product-btn">Añadir producto</a>
 <div class="clearfix"></div><hr>
 <table class="table table-bordered table-condensed table-striped">
   <thead>
     <th></th>
-    <th>Product</th>
-    <th>Price</th>
-    <th>Category</th>
-    <th>Featured</th>
-    <th>Sold</th>
+    <th>Producto</th>
+    <th>Precio</th>
+    <th>Categoría</th>
+    <th>Destacado</th>
+    <th>Vendidos</th>
   </thead>
   <tbody>
     <?php while($product=mysqli_fetch_assoc($presults)):
@@ -317,7 +331,7 @@
             <span class="glyphicon glyphicon-<?=(($product['featured']==1)?'minus':'plus');?>"></span>
           </a>
           <!-- Añade texto en caso esté en 1 -->
-          &nbsp <?=(($product['featured']==1)?'Featured Product':'');?>
+          &nbsp <?=(($product['featured']==1)?'Producto destacado':'');?>
         </td>
         <td>0</td>
       </tr>

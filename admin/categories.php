@@ -97,7 +97,7 @@
      }
    }
  ?>
- <h2 class="text-center">Categories</h2><hr>
+ <h2 class="text-center">Categorías</h2><hr>
  <div class="row">
    <!--Form-->
    <div class="col-md-6">
@@ -106,7 +106,7 @@
        <div id="errors">
        </div>
        <div class="form-group">
-         <label for="parent">Parent</label>
+         <label for="parent">Padre</label>
          <select class="form-control" name="parent" id="parent">
            <!-- seleccionar el campo PADRE 0 en caso de error o edición -->
            <?php if(!isset($_GET['edit'])){ ?>
@@ -129,7 +129,7 @@
          </select>
        </div>
        <div class="form-group">
-         <label for="category">Category</label>
+         <label for="category">Categoría</label>
          <input type="text" class="form-control" name="category" id="category" value="<?=$category_value?>">
        </div>
        <div class="form-group text-center">
@@ -145,7 +145,7 @@
    <div class="col-md-6">
      <table class="table table-bordered">
        <thead>
-         <th>Category</th><th>Parent</th><th></th>
+         <th>Categoría</th><th>Padre</th><th></th>
        </thead>
        <tbody>
          <?php

@@ -87,14 +87,14 @@ if(isset($_POST['add_submit']))
       <input type="text" name="brand" id="brand" class="form-control" value="<?=$brand_value;?>">
       <input type="submit" name="add_submit" value="<?=((isset($_GET['edit']))?'Editar':'Agregar');?>" class="btn btn-success">
       <?php if(isset($_GET['edit'])){ ?>
-        <a href="brands.php" class="btn btn-default">Cancel</a>
+        <a href="brands.php" class="btn btn-default">Cancelar</a>
       <?php } ?>
     </div>
   </form>
 </div><hr>
 <table class="table table-bordered table-striped table-auto table-condensed">
   <thead>
-    <th></th><th>Brand</th><th></th>
+    <th></th><th>Marca</th><th></th>
   </thead>
   <tbody>
     <?php while ($brand=mysqli_fetch_assoc($results)) { ?>
