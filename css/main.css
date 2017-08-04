@@ -56,7 +56,7 @@ body{
 
 .img-thumb{
   width:auto;
-  height: 200px;
+  height: 150px;
 }
 
 #footer{
@@ -80,4 +80,17 @@ img.details{
 .saved-image img{
   width:200px;
   height:auto;
+}
+
+#login-form{
+  width:50%;
+  height:70%;
+  border:2px solid #000;
+  border-radius: 15px;
+  /*Sombra bajo el div*/
+  /*7px hacia abajo, 7px hacia arriba,15px intensidad en pixeles, color*/
+  box-shadow: 7px 7px 15px black;
+  margin:7% auto;
+  padding: 15px;
+  background-color: #fff;
 }

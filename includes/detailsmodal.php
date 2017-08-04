@@ -38,25 +38,25 @@
               </div>
             </div>
             <div class="col-sm-6">
-              <h4>Details</h4>
+              <h4>Descripción: </h4>
               <!-- Para preservar los saltos de línea -->
               <p><?=nl2br($product['description']);?></p>
               <hr>
-              <p>Price: $<?=$product['price']?></p>
-              <p>Brand: <?=$brand['brand']?></p>
+              <p>Precio: $<?=$product['price']?></p>
+              <p>Marca: <?=$brand['brand']?></p>
               <form action="add_cart.php" method="post">
                 <div class="form-group">
                   <div>
-                    <label for="quantity">Quantity:</label>
+                    <label for="quantity">Cantidad:</label>
                     <input type="text" class="form-control" id="quantity" name="quantity">
                   </div>
                   <div>
-                    <p>Available: 3</p>
+                    <p>Disponibles: 3</p>
                   </div>
 
                 </div>
                 <div class="form-group">
-                  <label for="size">Size: </label>
+                  <label for="size">Tamaño: </label>
                   <select name="size" id="size" class="form-control">
                     <option value=""></option>
                     <?php foreach($size_array as $string)
@@ -67,7 +67,7 @@
                       $size=$string_array[0];
                       //El indice 1 contiene la cantidad en stock de esa talla
                       $quantity=$string_array[1];
-                      echo '<option value="'.$size.'">'.$size.' ('.$quantity.' Available)</option>';
+                      echo '<option value="'.$size.'">'.$size.' ('.$quantity.' disponibles)</option>';
                     }
                     ?>
 
@@ -80,8 +80,8 @@
       </div>
       <div class="modal-footer">
         <!-- El botón de cerrar también cierra el modal -->
-        <button class="btn btn-default"  onclick="closeModal()">Close</button>
-        <button class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-shopping-cart"></span>Add To Cart</button>
+        <button class="btn btn-default"  onclick="closeModal()">Cerrar</button>
+        <button class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-shopping-cart"></span>Añadir al carrito</button>
       </div>
     </div>
   </div>
