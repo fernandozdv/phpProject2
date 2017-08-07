@@ -17,6 +17,7 @@
     background-image:url("/tutorial/phpProject2/images/headerlogo/background.png");
     /*Porcentaje de pantalla de imagen,imagen original responsive*/
     background-size: 100vw 100vh;
+    background-attachment: fixed;
   }
 </style>
  <div id="login-form">
@@ -27,39 +28,55 @@
         //validación del formulario
         if(empty($_POST['email'])||empty($_POST['password']))
         {
-          $errors[]='Ingrese su correo y contraseña';
+          if(empty($_POST['email']))
+          {
+            $errors[]='Ingrese su correo';
+          }
+          if(empty($_POST['password']))
+          {
+            $errors[]='Ingrese su contraseña';
+          }
+        }else{
+          if(!filter_var($email,FILTER_VALIDATE_EMAIL))
+          {
+            //Validar correo
+            $errors[]="Ingrese un correo válido.";
+          }else
+          {
+            //Verificar la existencia del correo en la BD
+            $query=$db->query("SELECT * FROM users WHERE email='$email'");
+            $user=mysqli_fetch_assoc($query);
+            $userCount=mysqli_num_rows($query);
+            if($userCount<1)
+            {
+              $errors[]='No existe un usuario registrado con el correo ingresado.';
+            }else{
+              //Contraseña debe ser mayor a 6 caracteres
+              if(strlen($password)<6)
+              {
+                $errors[]="La contraseña debe tener de 6 caracteres a más";
+              }else{
+                //Verificar contraseña
+                //Compara la contraseña ingresa con la de la BD
+                //La contraseña de la BD se encuentra encriptada
+                if(!password_verify($password,$user['password']))
+                {
+                  $errors[]="La contraseña ingresada es incorrecta. Ingrese otra vez.";
+                }
+              }
+            }
+          }
         }
-        //Validar correo
-        if(!filter_var($email,FILTER_VALIDATE_EMAIL))
-        {
-          $errors[]="Ingrese un corre válido.";
-        }
-        //Contraseña debe ser mayor a 6 caracteres
-        if(strlen($password)<6)
-        {
-          $errors[]="La contraseña debe tener de 6 caracteres a más";
-        }
-        //Verificar la existencia del correo en la BD
-        $query=$db->query("SELECT * FROM users WHERE email='$email'");
-        $user=mysqli_fetch_assoc($query);
-        $userCount=mysqli_num_rows($query);
-        if($userCount<1)
-        {
-          $errors[]='No existe un usuario registrado con el correo ingresado.';
-        }
-        //Verificar contraseña
-        //Compara la contraseña ingresa con la de la BD
-        //La contraseña de la BD se encuentra encriptada
-        if(!password_verify($password,$user['password']))
-        {
-          $errors[]="La contraseña ingresada es incorrecta. Ingrese otra vez.";
-        }
+
         //Si hay errores
         if(!empty($errors))
         {
           echo display_errors($errors);
         }else{
           //logearse
+          $user_id=$user['id'];
+          //iniciar sesión
+          login($user_id);
         }
       }
       ?>
