@@ -28,8 +28,8 @@
     //Para hacer uso de la variable $db que es global en init.php
     global $db;
     //dar formate fecha para $date
-    $date=date('Y-m-d H:i:s');
-    $db->query("UPDATE users SET last_login=$date WHERE id='$user_id'");
+    $date=date("Y-m-d H:i:s");
+    $db->query("UPDATE users SET last_login='$date' WHERE id='$user_id'");
     //Variable de sesión de confirmación de sesión
     $_SESSION['success_flash']='Te logeaste exitosamente!';
     header('Location: index.php');
