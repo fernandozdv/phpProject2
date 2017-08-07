@@ -20,7 +20,7 @@
         <ul class="dropdown-menu" role="menu">
             <!-- Categorias hijas -->
           <?php while($child=mysqli_fetch_assoc($cquery)){?>
-            <li><a href="#"><?php echo $child['category'] ?></a></li>
+            <li><a href="category.php?cat=<?=$child['id'];?>"><?php echo $child['category'] ?></a></li>
           <?php } ?>
         </ul>
       </li>

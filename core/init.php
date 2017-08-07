@@ -29,13 +29,13 @@
 
   if(isset($_SESSION['success_flash']))
   {
-    echo '<div class="bg-success"><p class="text-center text-success">'.$_SESSION['success_flash'].'</p></div>';
+    echo '<div class="bg-success"><h4 class="text-center text-success">'.$_SESSION['success_flash'].'</h4></div>';
     //una vez ha iniciado sesión, se destruye esa variable
     unset($_SESSION['success_flash']);
   }
   if(isset($_SESSION['error_flash']))
   {
-    echo '<div class="bg-danger"><p class="text-center text-danger">'.$_SESSION['error_flash'].'</p></div>';
+    echo '<div class="bg-danger"><h4 class="text-center text-danger">'.$_SESSION['error_flash'].'</h4></div>';
     //una vez ha iniciado sesión, se destruye esa variable
     unset($_SESSION['error_flash']);
   }

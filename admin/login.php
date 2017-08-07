@@ -7,10 +7,6 @@
   $password=((isset($_POST['password']))?sanitize($_POST['password']):'');
   $password=trim($password);
   $errors=array();
-  /*Encriptación
-  $hashed=password_hash("tamarenose27Z",PASSWORD_DEFAULT);
-  echo $hashed;*/
-
  ?>
 <style>
   body{
