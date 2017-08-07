@@ -76,6 +76,11 @@ img.details{
 #add-product-btn{
   margin-top: -35px;
 }
+
+/*Botón admi user*/
+#add-user-btn{
+  margin-top: -35px;
+}
 /*Imagen en edición*/
 .saved-image img{
   width:200px;

@@ -70,4 +70,11 @@
     header('Location: '.$url);
   }
 
+  function pretty_date($date)
+  {
+    //Convierte a cadena y da formato
+    //Mes en texto, día en número,año completo,h,m y periodo AM o PM
+    return date('F d, Y h:i A',strtotime($date));
+  }
+
  ?>

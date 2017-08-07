@@ -1,7 +1,9 @@
 <?php
 //Conexión a la base de datos
   $db=mysqli_connect('localhost','root','','tutorial');
-//Si ocurre un error termina la conexión
+  //Conexión entre mysqli y PHP, envío de datos
+  $db->set_charset("utf8");
+  //Si ocurre un error termina la conexión
   if(mysqli_connect_errno())
   {
     echo 'Fallo en la conección a la base de datos: '.mysqli_connect_error();
