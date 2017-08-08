@@ -32,6 +32,8 @@
       <div class="modal-body">
         <div class="container-fluid">
           <div class="row">
+            <!-- Para mensajes de alerta de error -->
+            <span id="modal_errors" class="bg-danger"></span>
             <div class="col-sm-6">
               <div class="center-block">
                 <img src="<?=$product['image']?>" alt="<?=$product['title']?>" class="details img-responsive">
@@ -44,7 +46,9 @@
               <hr>
               <p>Precio: $<?=$product['price']?></p>
               <p>Marca: <?=$brand['brand']?></p>
-              <form action="add_cart.php" method="post">
+              <form action="add_cart.php" method="post" id="add_product_form">
+                <input type="hidden" name="product" id="product" value="<?=$id;?>">
+                <input type="hidden" name="available" id="available" value="">
                 <div class="form-group">
                   <div>
                     <label for="quantity">Cantidad:</label>
@@ -62,8 +66,9 @@
                       //El indice 0 contiene el tamaño de la prenda
                       $size=$string_array[0];
                       //El indice 1 contiene la cantidad en stock de esa talla
-                      $quantity=$string_array[1];
-                      echo '<option value="'.$size.'">'.$size.' ('.$quantity.' disponibles)</option>';
+                      $available=$string_array[1];
+                      //Crea un atributo data para almacenar el valor de productos disponibles y capturarlos con JQ
+                      echo '<option value="'.$size.'" data-availablexd="'.$available.'">'.$size.' ('.$available.' disponibles)</option>';
                     }
                     ?>
 
@@ -77,12 +82,18 @@
       <div class="modal-footer">
         <!-- El botón de cerrar también cierra el modal -->
         <button class="btn btn-default"  onclick="closeModal()">Cerrar</button>
-        <button class="btn btn-warning" type="submit"><span class="glyphicon glyphicon-shopping-cart"></span>Añadir al carrito</button>
+        <button class="btn btn-warning" onclick="add_to_cart(); return false;"><span class="glyphicon glyphicon-shopping-cart"></span>Añadir al carrito</button>
       </div>
     </div>
   </div>
 </div>
 <script>
+  jQuery("#size").change(function(){
+    /*Pasa el valor por data available al hidden available hacia al evento del click*/
+    var available=jQuery("#size option:selected").data("availablexd");
+    jQuery('#available').val(available);
+  });
+
   function closeModal(){
     //Apaga el modal
     jQuery('#details-modal').modal('hide');

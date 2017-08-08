@@ -17,6 +17,14 @@
   //Llama a helpers
   require_once BASEURL.'helpers/helpers.php';
 
+  //carrito vacío
+  $cart_id='';
+  if(isset($_COOKIE[CART_COOKIE]))
+  {
+    //Si existe la cookie captura el valor para usarlo en add_cart.php
+    $cart_id=sanitize($_COOKIE[CART_COOKIE]);
+  }
+
   if(isset($_SESSION['SBUser']))
   {
     $user_id=$_SESSION['SBUser'];
