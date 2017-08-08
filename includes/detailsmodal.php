@@ -48,12 +48,8 @@
                 <div class="form-group">
                   <div>
                     <label for="quantity">Cantidad:</label>
-                    <input type="text" class="form-control" id="quantity" name="quantity">
+                    <input type="number" min='0' class="form-control" id="quantity" name="quantity">
                   </div>
-                  <div>
-                    <p>Disponibles: 3</p>
-                  </div>
-
                 </div>
                 <div class="form-group">
                   <label for="size">Tamaño: </label>
