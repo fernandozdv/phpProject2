@@ -4,4 +4,7 @@
   define('CART_COOKIE','SBwi72UCklwiqzz2');
   //Tiempo de expiración, tiempo actual en segundos, más 30 días
   define('CART_COOKIE_EXPIRE',time()+(86400*30));
+  //impuestoxd
+  define('TAXRATETOTAL',1.18);
+  define('TAXRATE',0.18);
  ?>

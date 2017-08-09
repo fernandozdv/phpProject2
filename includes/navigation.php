@@ -10,7 +10,8 @@
     <ul class="nav navbar-nav">
       <?php
       //Categorias padre
-      while($parent=mysqli_fetch_assoc($pquery)) {
+      while($parent=mysqli_fetch_assoc($pquery)) :?>
+      <?php
         $parent_id=$parent['id'];
         $sql2="SELECT * FROM categories WHERE parent='$parent_id'";
         $cquery=$db->query($sql2);
@@ -24,7 +25,8 @@
           <?php } ?>
         </ul>
       </li>
-    <?php } ?>
+    <?php endwhile; ?>
+      <li><a href="cart.php"><span class="glyphicon glyphicon-shopping-cart"></span> Mi carrito</a></li>
     </ul>
   </div>
 </nav>
