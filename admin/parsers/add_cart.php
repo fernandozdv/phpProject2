@@ -49,9 +49,11 @@
     }
 
   $items_json=json_encode($new_items);
-  $cart_expire=date("Y-m-d H:i:s".strtotime("+30 days"));
+  $cart_expire=date("Y-m-d H:i:s",strtotime("+30 days"));
   $db->query("UPDATE cart SET items='$items_json',expire_date='$cart_expire' WHERE id='$cart_id'");
+  //Elimina la cookie
   setcookie(CART_COOKIE,'',1, '/', false);
+  //La crea nuevamente
   setcookie(CART_COOKIE,$cart_id,CART_COOKIE_EXPIRE,'/',false);
   }else{
     //agregar el carrito a la BD y crear la cookie
