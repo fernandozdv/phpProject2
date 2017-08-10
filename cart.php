@@ -12,7 +12,7 @@
     $i=1;
     $sub_total=0;
     $item_count=0;
-
+    $grand_total=0;
   }
  ?>
 <div class="row">
@@ -32,7 +32,7 @@
             <th>Precio</th>
             <th>Cantidad</th>
             <th>Tamaño</th>
-            <th>Subtotal</th>
+            <th>Total</th>
           </thead>
           <tbody>
             <?php foreach($items as $item){
@@ -68,9 +68,9 @@
             <?php
               $i++;
               $item_count +=$item['quantity'];
-              $sub_total+=($product['price']*$item['quantity']);
+              $grand_total+=($product['price']*$item['quantity']);
               }
-              $grand_total=TAXRATETOTAL*$sub_total;
+              $sub_total=TAXRATETOTAL*$grand_total;
               $impuesto=TAXRATE*$sub_total;
               ?>
           </tbody>
@@ -100,19 +100,100 @@
 
           <!-- Modal -->
           <div class="modal fade" id="checkoutModal" tabindex="-1" role="dialog" aria-labelledby="checkoutModalLabel">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                  <h4 class="modal-title" id="checkoutModalLabel">Modo de pago</h4>
-                </div>
-                <div class="modal-body">
-                  ...
-                </div>
+              <form action="thankYou.php" method="post" id="payment-form">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="checkoutModalLabel">Información de pago</h4>
+                  </div>
+                  	<div class="modal-body">
+                      <span class="bg-danger" id="payment-errors"></span>
+                      <div id="step1" style="display:block">
+                        <div class="row">
+                          <div class="form-group col-md-6">
+                            <label for="full_name">Nombre:</label>
+                            <input type="text" class="form-control" name="full_name" id="full_name">
+                          </div>
+                          <div class="form-group col-md-6">
+                            <label for="email">Correo electrónico:</label>
+                            <input type="email" class="form-control" name="email" id="email">
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="form-group col-md-6">
+                            <label for="street">Dirección:</label>
+                            <input type="text" class="form-control" name="street" id="street">
+                          </div>
+                          <div class="form-group col-md-6">
+                            <label for="street2">Dirección 2:</label>
+                            <input type="text" class="form-control" name="street2" id="street2">
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="form-group col-md-6">
+                            <label for="city">Ciudad:</label>
+                            <input type="text" class="form-control" name="city" id="city">
+                          </div>
+                          <div class="form-group col-md-6">
+                            <label for="state">Departamento:</label>
+                            <input type="text" class="form-control" name="state" id="state">
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="form-group col-md-6">
+                            <label for="zip_code">Código postal:</label>
+                            <input type="text" class="form-control" name="zip_code" id="zip_code">
+                          </div>
+                          <div class="form-group col-md-6">
+                            <label for="country">País:</label>
+                            <input type="text" class="form-control" name="country" id="country">
+                          </div>
+                        </div>
+                      </div>
+                      <div id="step2" style="display:none">
+                        <div class="row">
+                          <div class="form-group col-md-3">
+                              <label for="name">Nombre de la tarjeta:</label>
+                              <input type="text" class="form-control" id="name">
+                          </div>
+                          <div class="form-group col-md-3">
+                              <label for="number">Número de la tarjeta:</label>
+                              <input type="text" class="form-control" id="number">
+                          </div>
+                          <div class="form-group col-md-2">
+                              <label for="cvc">CVC:</label>
+                              <input type="text" class="form-control" id="cvc">
+                          </div>
+                          <div class="form-group col-md-2">
+                              <label for="name">Expira(Mes):</label>
+                              <select class="form-control" id="exp-month">
+                                <option value=""></option>
+                                <?php for($i=1;$i<13;$i++): ?>
+                                  <option value="<?=$i;?>"><?=$i;?></option>
+                                <?php endfor; ?>
+                              </select>
+                          </div>
+                          <div class="form-group col-md-2">
+                              <label for="exp-year">Expira(Año):</label>
+                              <select class="form-control" id="exp-year">
+                                <option value=""></option>
+                                <?php $yr=date("Y"); ?>
+                                <?php for($i=0;$i<11;$i++): ?>
+                                  <option value="<?=$yr+$i;?>"><?=$yr+$i;?></option>
+                                <?php endfor; ?>
+                              </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                  <button type="button" class="btn btn-primary">Guardar cambios</button>
+                  <button type="button" class="btn btn-primary" onclick="check_address();" id="next_button">Siguiente >></button>
+                  <button type="button" class="btn btn-primary" onclick="back_address();" id="back_button" style="display:none"><< Anterior >></button>
+                  <button type="submit" class="btn btn-primary" id="checkout_button" style="display:none">Verificar >></button>
                 </div>
+              </form>
               </div>
             </div>
           </div>
@@ -120,6 +201,58 @@
       <?php endif; ?>
   </div>
 </div>
+
+<script type="text/javascript">
+
+  function back_address()
+  {
+    jQuery('#payment-errors').html("");
+    jQuery('#step1').css("display","block");
+    jQuery('#step2').css("display","none");
+    //Botones alineados, no como bloque
+    jQuery('#next_button').css("display","inline-block");
+    jQuery('#back_button').css("display","none");
+    jQuery('#checkout_button').css("display","none");
+    jQuery('#checkoutModalLabel').html("Información de pago");
+
+  }
+
+  function check_address()
+  {
+    var data = {
+      'full_name': jQuery('#full_name').val(),
+      'email': jQuery('#email').val(),
+      'street': jQuery('#street').val(),
+      'street2': jQuery('#street2').val(),
+      'city': jQuery('#city').val(),
+      'state': jQuery('#state').val(),
+      'zip_code': jQuery('#zip_code').val(),
+      'country': jQuery('#country').val(),
+    };
+    jQuery.ajax({
+      url:'/tutorial/phpProject2/admin/parsers/check_address.php',
+      method: 'POST',
+      data: data,
+      success: function(data){
+        if(data!='no-error')
+        {
+          jQuery('#payment-errors').html(data);
+        }
+        if(data=='no-error')
+        {
+          jQuery('#payment-errors').html("");
+          jQuery('#step1').css("display","none");
+          jQuery('#step2').css("display","block");
+          jQuery('#next_button').css("display","none");
+          jQuery('#back_button').css("display","inline-block");
+          jQuery('#checkout_button').css("display","inline-block");
+          jQuery('#checkoutModalLabel').html("Ingresa los detalles de tu tarjeta");
+        }
+      },
+      error:function(){alert("Error,verificar dirección");}
+    });
+  }
+</script>
 
 <?php
   include 'includes/footer.php';
