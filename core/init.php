@@ -16,6 +16,8 @@
   require_once $_SERVER['DOCUMENT_ROOT'].'/tutorial/phpProject2/config.php';
   //Llama a helpers
   require_once BASEURL.'helpers/helpers.php';
+  //Se cargará automáticamente cualquier clase que se use en el proyecto
+  require BASEURL.'vendor/autoload.php';
 
   //carrito vacío
   $cart_id='';
