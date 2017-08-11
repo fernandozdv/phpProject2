@@ -109,6 +109,11 @@
                   </div>
                   	<div class="modal-body">
                       <span class="bg-danger" id="payment-errors"></span>
+                      <input type="hidden" name="tax" value="<?=$impuesto;?>">
+                      <input type="hidden" name="sub_total" value="<?=$sub_total;?>">
+                      <input type="hidden" name="grand_total" value="<?=$grand_total;?>">
+                      <input type="hidden" name="cart_id" value="<?=$cart_id;?>">
+                      <input type="hidden" name="description" value="<?=$item_count.' producto'.(($item_count>1)?'s':'').' de tiendita :v';?>">
                       <div id="step1" style="display:block">
                         <div class="row">
                           <div class="form-group col-md-6">
@@ -123,31 +128,31 @@
                         <div class="row">
                           <div class="form-group col-md-6">
                             <label for="street">Dirección:</label>
-                            <input type="text" class="form-control" name="street" id="street">
+                            <input type="text" class="form-control" name="street" id="street" data-stripe="address_line1">
                           </div>
                           <div class="form-group col-md-6">
                             <label for="street2">Dirección 2:</label>
-                            <input type="text" class="form-control" name="street2" id="street2">
+                            <input type="text" class="form-control" name="street2" id="street2" data-stripe="address_line2">
                           </div>
                         </div>
                         <div class="row">
                           <div class="form-group col-md-6">
                             <label for="city">Ciudad:</label>
-                            <input type="text" class="form-control" name="city" id="city">
+                            <input type="text" class="form-control" name="city" id="city" data-stripe="city">
                           </div>
                           <div class="form-group col-md-6">
                             <label for="state">Departamento:</label>
-                            <input type="text" class="form-control" name="state" id="state">
+                            <input type="text" class="form-control" name="state" id="state" data-stripe="state">
                           </div>
                         </div>
                         <div class="row">
                           <div class="form-group col-md-6">
                             <label for="zip_code">Código postal:</label>
-                            <input type="text" class="form-control" name="zip_code" id="zip_code">
+                            <input type="text" class="form-control" name="zip_code" id="zip_code" data-stripe="address_zip">
                           </div>
                           <div class="form-group col-md-6">
                             <label for="country">País:</label>
-                            <input type="text" class="form-control" name="country" id="country">
+                            <input type="text" class="form-control" name="country" id="country" data-stripe="address_country">
                           </div>
                         </div>
                       </div>
@@ -155,19 +160,19 @@
                         <div class="row">
                           <div class="form-group col-md-3">
                               <label for="name">Nombre de la tarjeta:</label>
-                              <input type="text" class="form-control" id="name">
+                              <input type="text" class="form-control" id="name" data-stripe="name">
                           </div>
                           <div class="form-group col-md-3">
                               <label for="number">Número de la tarjeta:</label>
-                              <input type="text" class="form-control" id="number">
+                              <input type="text" class="form-control" id="number" data-stripe="number">
                           </div>
                           <div class="form-group col-md-2">
                               <label for="cvc">CVC:</label>
-                              <input type="text" class="form-control" id="cvc">
+                              <input type="text" class="form-control" id="cvc" data-stripe="cvc">
                           </div>
                           <div class="form-group col-md-2">
                               <label for="name">Expira(Mes):</label>
-                              <select class="form-control" id="exp-month">
+                              <select class="form-control" id="exp-month" data-stripe="exp_month">
                                 <option value=""></option>
                                 <?php for($i=1;$i<13;$i++): ?>
                                   <option value="<?=$i;?>"><?=$i;?></option>
@@ -176,7 +181,7 @@
                           </div>
                           <div class="form-group col-md-2">
                               <label for="exp-year">Expira(Año):</label>
-                              <select class="form-control" id="exp-year">
+                              <select class="form-control" id="exp-year" data-stripe="exp_year">
                                 <option value=""></option>
                                 <?php $yr=date("Y"); ?>
                                 <?php for($i=0;$i<11;$i++): ?>
@@ -240,6 +245,7 @@
         }
         if(data=='no-error')
         {
+
           jQuery('#payment-errors').html("");
           jQuery('#step1').css("display","none");
           jQuery('#step2').css("display","block");
@@ -252,6 +258,28 @@
       error:function(){alert("Error,verificar dirección");}
     });
   }
+
+  Stripe.setPublishableKey('<?=STRIPE_PUBLIC;?>');
+
+  function stripeResponseHandler(status,response){
+    var $form=$('#payment-form');
+    if(response.error){
+      $form.find('#payment-errors').text(response.error.message);
+      $form.find('button').prop('disabled',false);
+    }else{
+      var token=response.id;
+      $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+      $form.get(0).submit();
+    }
+  };
+  jQuery(function($){
+    $('#payment-form').submit(function(event){
+      var $form = $(this);
+      $form.find('button').prop('disabled',true);
+      Stripe.card.createToken($form,stripeResponseHandler);
+      return false;
+    })
+  });
 </script>
 
 <?php

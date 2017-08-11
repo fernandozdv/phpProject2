@@ -7,13 +7,15 @@
   //impuestoxd
   define('TAXRATETOTAL',100/118);
   define('TAXRATE',0.18);
-
+  //Moneda usd: dolares
   define('CURRENCY','usd');
   define('CHECKOUTMODE','TEST');//Test prueba, LIVE real
 
   if(CHECKOUTMODE=='TEST')
   {
+    //token privado
     define('STRIPE_PRIVATE','sk_test_plXBdKDo0aQjvF9PLtEKHFE9');
+    //token de para publico
     define('STRIPE_PUBLIC','pk_test_Fd72v7UMIljkVoaMOzI6XrLt');
   }
 
@@ -23,4 +25,3 @@
     define('STRIPE_PUBLIC','');
   }
  ?>
-+
