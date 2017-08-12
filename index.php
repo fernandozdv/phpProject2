@@ -12,7 +12,7 @@
       <!--main content-->
       <div class="col-md-8">
         <div class="row">
-          <h2 class="text-center">Productos destacados</h2><hr>
+          <h2 class="text-center" id="p">Productos destacados</h2>
           <?php while($product=mysqli_fetch_assoc($featured)) {
             //var_dump($product)
             ?>
