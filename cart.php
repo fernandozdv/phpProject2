@@ -259,23 +259,34 @@
     });
   }
 
+
+  //NOTA: data-stripe en los campos permite extraer la información de formulario a Stripe
+  //Identificar con Stripe para comunicarse
   Stripe.setPublishableKey('<?=STRIPE_PUBLIC;?>');
 
   function stripeResponseHandler(status,response){
     var $form=$('#payment-form');
     if(response.error){
+      //Si ocurrió errores en el formulario lo mostrará en el div payment-errors
       $form.find('#payment-errors').text(response.error.message);
+      //Activa los botones que fueron desactivados
       $form.find('button').prop('disabled',false);
     }else{
+      //Obtiene un token
       var token=response.id;
+      //Crea un campo oculto que será recibido por "THANKYOU.PHP"
       $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+      //Envía el formulario al servidor(thankyou.php)
       $form.get(0).submit();
     }
   };
   jQuery(function($){
+    //Creación del token a partir del formulario a Stripe
     $('#payment-form').submit(function(event){
       var $form = $(this);
+      //Desactiva botones temporalmente
       $form.find('button').prop('disabled',true);
+      //Crea el toquen y obtiene la devolución a la llamada a Stripe, el token..
       Stripe.card.createToken($form,stripeResponseHandler);
       return false;
     })

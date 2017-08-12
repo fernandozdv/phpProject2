@@ -29,7 +29,8 @@ $metadata=array(
   "tax"       =>$tax,
   "sub_total" =>$sub_total
 );
-// Charge the user's card:
+// CARGAR LA TARJETA DE CRÉDITO CON EL MONTO, TIPO Moneda
+// TOKE, DESCRIPTION, CORREO, Y METADATA
 try{
 $charge = \Stripe\Charge::create(array(
   "amount" => $charge_amount,
@@ -40,7 +41,45 @@ $charge = \Stripe\Charge::create(array(
   "metadata" => $metadata
 ));
 
+//Actualizar el inventario
+$itemQ=$db->query("SELECT * FROM cart WHERE id='$cart_id'");
+$iresults=mysqli_fetch_assoc($itemQ);
+$items=json_decode($iresults['items'],true);
+//Para cada producto
+foreach($items as $item)
+{
+  //Nuevo array para la tabla productos
+  $newSizes=array();
+  $item_id=$item['id'];
+  //Busca la cadena de tamaños y cadenas
+  $productQ=$db->query("SELECT sizes FROM products WHERE id='$item_id'");
+  $product=mysqli_fetch_assoc($productQ);
+  //Convierte la cadena de la BD en un array
+  $sizes=sizesToArray($product['sizes']);
+  foreach($sizes as $size)
+  {
+    //Si es del mismo tamaño
+    if($size['size']==$item['size'])
+    {
+      //Actualiza la cantidad(resta)
+      $q=$size['quantity']-$item['quantity'];
+      //Concatena el nuevo array
+      $newSizes[]=array('size'=> $size['size'],'quantity'=> $q);
+    }else{
+      //Si no, igual lo agrega nuevamente
+      $newSizes[]=array('size'=> $size['size'],'quantity'=> $size['quantity']);
+    }
+  }
+  //Le da nuevamente le formato de cadena para la BD
+  $sizesString=sizesToString($newSizes);
+  $db->query("UPDATE products SET sizes='$sizesString' WHERE id='$item_id'");
+
+}
+
+
+//Compra, actualiza el carrito en la DB
 $db->query("UPDATE cart SET paid=1 WHERE id='$cart_id'");
+//Inserta en tabla de transacciones($charge->object es el tipo de transacción(Cargar o Charge))
 $db->query("INSERT INTO transactions
   (charge_id,cart_id,full_name,email,street,street2,city,state,zip_code,
     country,sub_total,tax,grand_total,description,txn_type) VALUES

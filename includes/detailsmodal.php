@@ -67,8 +67,11 @@
                       $size=$string_array[0];
                       //El indice 1 contiene la cantidad en stock de esa talla
                       $available=$string_array[1];
-                      //Crea un atributo data para almacenar el valor de productos disponibles y capturarlos con JQ
-                      echo '<option value="'.$size.'" data-availablexd="'.$available.'">'.$size.' ('.$available.' disponibles)</option>';
+                      if($available>0)
+                      {
+                        //Crea un atributo data para almacenar el valor de productos disponibles y capturarlos con JQ
+                        echo '<option value="'.$size.'" data-availablexd="'.$available.'">'.$size.' ('.$available.' disponibles)</option>';
+                      }
                     }
                     ?>
 
