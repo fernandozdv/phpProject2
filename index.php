@@ -23,7 +23,7 @@
             <p class="list-price text-danger">Precio anterior: <s>$<?= $product['list_price']; ?></s></p>
             <p class="price">Precio actual: $<?= $product['price']; ?></p>
             <!--Al presionar el botón de detalles, llamará a la función JS detailsmodal pasando el id del producto-->
-            <button type="button" class="btn btn-sm btn-success" onclick="detailsmodal(<?= $product['id']; ?>)">Detalles</button>
+              <button type="button" class="btn btn-sm btn-success" onclick="detailsmodal(<?= $product['id']; ?>)">Detalles</button>
           </div>
           <?php  } ?>
         </div>

@@ -153,3 +153,7 @@ img.details{
   padding: 15px;
   background-color: #fff;
 }
+
+input.price-range{
+  width: 55px;
+}

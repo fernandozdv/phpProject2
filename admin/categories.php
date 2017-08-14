@@ -137,11 +137,13 @@
          <label for="category">Categoría</label>
          <input type="text" class="form-control" name="category" id="category" value="<?=$category_value?>">
        </div>
-       <div class="form-group text-center">
-         <input type="submit" name="add_category" class="btn btn-success" value="<?=((isset($_GET['edit'])?'Editar':'Agregar'));?>">
-       <?php if(isset($_GET['edit'])){ ?>
-         <a href="categories.php" class="btn btn-default">Cancelar</a>
-       <?php } ?>
+       <div class="form-group">
+         <center>
+           <input type="submit" name="add_category" class="btn btn-success" value="<?=((isset($_GET['edit'])?'Editar':'Agregar'));?>">
+           <?php if(isset($_GET['edit'])){ ?>
+           <a href="categories.php" class="btn btn-default">Cancelar</a>
+           <?php } ?>
+         </center>
       </div>
 
      </form>
