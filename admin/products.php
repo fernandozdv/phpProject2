@@ -228,6 +228,7 @@
           </div>
           <?php else: ?>
             <label for="photo">Imagen del producto:</label>
+            <!-- fallé :v -->
             <input type="file" name="photo" class="form-control" id="photo">
         <?php endif; ?>
       </div>
