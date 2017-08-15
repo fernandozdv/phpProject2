@@ -64,19 +64,18 @@
     jQuery("#modal_errors").html("");
     var size= jQuery("#size").val();
     var quantity= jQuery("#quantity").val();
-    var available= jQuery("#available").val();
+    var available= parseInt(jQuery("#available").val());
     var error='';
     //Serializa los campos del formulario en notación URL para Ajax
     var data=jQuery("#add_product_form").serialize();
+
     if(size==''||quantity==''||quantity==0)
     {
       error+='<p class="text-danger text-center">Debes elegir un tamaño y la cantidad a comprar</p>';
       jQuery("#modal_errors").html(error);
-      return;
     }else if(quantity>available){
       error+='<p class="text-danger text-center">La cantidad que desea comprar excede la cantidad disponible</p>';
       jQuery("#modal_errors").html(error);
-      return;
     }else{
       //proceder a realizar la petición
       jQuery.ajax({
