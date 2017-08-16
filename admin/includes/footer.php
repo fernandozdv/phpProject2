@@ -10,7 +10,8 @@
       if(jQuery('#size'+i).val()!='')
       {
         var temp=jQuery('#qty'+i).val();
-        sizeString+=','+jQuery('#size'+i).val()+':'+((temp)?temp:'0');
+        var threshold=jQuery('#threshold'+i).val();
+        sizeString+=','+jQuery('#size'+i).val()+':'+((temp)?temp:'0')+':'+((threshold)?threshold:'0');
       }
     }
     sizeString=sizeString.replace(",","");

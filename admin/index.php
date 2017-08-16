@@ -65,11 +65,9 @@ include 'includes/navigation.php';
         //Verifica si existe la clave $month en $current
         if(!array_key_exists($month,$current))
         {
-          var_dump($current);
           //Agrega el mes como llave y almacena el total
           $current[$month]=$x['grand_total'];
         }else{
-          echo ' no'.$month;
           //Si ya existe el mes como llave, suma el total para
           //calcular el total por mes
           $current[$month]+=$x['grand_total'];
@@ -125,8 +123,62 @@ include 'includes/navigation.php';
       </table>
     </div>
     <!-- Inventario -->
+    <?php
+      $iQuery=$db->query("SELECT * FROM products WHERE deleted=0");
+      $lowItems=array();
+      while($product=mysqli_fetch_assoc($iQuery))
+      {
+        $item=array();
+        $sizes=sizesToArray($product['sizes']);
+        foreach ($sizes as $size)
+        {
+          //Productos que han pasado el límite mínimo en stock
+          if($size['quantity']<=$size['threshold'])
+          {
+            //Array de categoría y categoría padre
+            $cat=get_category($product['categories']);
+            $item=array(
+              'title'=>$product['title'],
+              'size'=>$size['size'],
+              'quantity'=>$size['quantity'],
+              'threshold'=>$size['threshold'],
+              'category'=>$cat['parent'].'-'.$cat['child']
+            );
+            $lowItems[]=$item;
+          }
+        }
+      }
+     ?>
     <div class="col-md-8">
-
+      <h3 class="text-center">Productos en límite de stock</h3>
+      <table class="table table-condensed table-bordered">
+        <thead>
+          <th>Producto</th>
+          <th>Categoría</th>
+          <th>Tamaño</th>
+          <th>Cantidad</th>
+          <th>Límite</th>
+        </thead>
+        <tbody>
+          <?php foreach($lowItems as $item):
+            $color='';
+            if($item['quantity']==0)
+            {
+              $color='danger';
+            }else if($item['quantity']<$item['threshold']){
+              $color='warning';
+            }
+            ?>
+          <tr<?=($color!='')?' class="'.$color.'"':'';?>>
+            <td><?=$item['title'];?></td>
+            <td><?=$item['category'];?></td>
+            <td><?=$item['size'];?></td>
+            <td><?=$item['quantity'];?></td>
+            <td><?=$item['threshold'];?></td>
+          </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
     </div>
   </div>
  <?php include 'includes/footer.php'; ?>

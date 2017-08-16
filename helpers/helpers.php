@@ -94,7 +94,7 @@
     foreach($sizesArray as $sizes)
     {
       $s=explode(':',$sizes);
-      $returnArray[]=array('size'=>$s[0],'quantity'=>$s[1]);
+      $returnArray[]=array('size'=>$s[0],'quantity'=>$s[1],'threshold'=>$s[2]);
     }
     return $returnArray;
   }
@@ -104,7 +104,7 @@
     $sizeString='';
     foreach($sizes as $size)
     {
-      $sizeString.=$size['size'].':'.$size['quantity'].',';
+      $sizeString.=$size['size'].':'.$size['quantity'].':'.$size['threshold'].',';
     }
     $trimmed=rtrim($sizeString,',');
     return $trimmed;

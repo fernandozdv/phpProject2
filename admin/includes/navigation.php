@@ -3,6 +3,7 @@
     <a href="/tutorial/phpProject2/admin/index.php" class="navbar-brand">Admin tiendita</a>
     <ul class="nav navbar-nav">
       <!--Menu items-->
+      <li><a href="index.php">Dashboard</a></li>
       <li><a href="brands.php">Marcas</a></li>
       <li><a href="categories.php">Categorías</a></li>
       <li><a href="products.php">Productos</a></li>

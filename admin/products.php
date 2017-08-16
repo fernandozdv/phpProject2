@@ -71,6 +71,7 @@
       $sizesArray=explode(',',$sizeString);
       $sArray=array();
       $qArray=array();
+      $tArray=array();
       foreach ($sizesArray as $ss)
       {
         //Divide los tamaños y sus cantidades
@@ -79,6 +80,8 @@
         $sArray[]=$s[0];
         //Almacena la cantidad de los tamaños, itera
         $qArray[]=$s[1];
+        //Almacena el límimeType
+        $tArray[]=$s[2];
       }
     }else{
       $sizesArray=array();
@@ -256,13 +259,17 @@
           <div class="container-fluid">
             <?php for ($i=1; $i <= 12; $i++):?>
             <div class="row">
-              <div class="form-group col-md-8">
+              <div class="form-group col-md-6">
                 <label for="size<?=$i;?>">Tamaño:</label>
                 <input type="text" name="size<?=$i;?>" class="form-control" id="size<?=$i;?>" value="<?=((!empty($sArray[$i-1]))?$sArray[$i-1]:'')?>">
               </div>
-              <div class="form-group col-md-4">
+              <div class="form-group col-md-3">
                 <label for="qty<?=$i;?>">Cantidad:</label>
                 <input type="number" name="qty<?=$i;?>" class="form-control" id="qty<?=$i;?>" value="<?=((!empty($qArray[$i-1]))?$qArray[$i-1]:'0')?>" min="0">
+              </div>
+              <div class="form-group col-md-3">
+                <label for="threshold<?=$i;?>">Límite:</label>
+                <input type="number" name="threshold<?=$i;?>" class="form-control" id="threshold<?=$i;?>" value="<?=((!empty($tArray[$i-1]))?$tArray[$i-1]:'0')?>" min="0">
               </div>
             </div>
             <?php endfor; ?>
